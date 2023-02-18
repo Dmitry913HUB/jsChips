@@ -7,12 +7,12 @@
     <title>Document</title>
 </head>
 <body>
-    <iframe id="iframe" name="my_iframe"></iframe>
-    <form id="formSubmit" target="my_iframe">        
+    <form id="formSubmit">        
         <input type="text" name="uname" value="Никита"><br>
         <input type="text" name="surname" value="Тен"><br>
         <input type="file" name="ff"><br>
-        <button type="submit" onclick="pushToServer()">Отправить</button>
+        <input type="button" value="Submit" onclick="pushToServer()"/>
+        <!-- <button type="submit" onclick="pushToServer()">Отправить</button> -->
     </form>    
 <script src="submitForm.js"></script>
 </body>
