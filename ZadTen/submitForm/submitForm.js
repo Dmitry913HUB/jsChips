@@ -37,22 +37,17 @@ let url = 'http://178.216.77.25/fileToServer';
 async function postData( url = ''){
 
     let form = new FormData(document.getElementById('formSubmit'));
-    //form.append('uname', 'Nikita');
-    //form.append('surname', 'Ten');
-    
-    // fetch(url, {
-    //     method: 'POST',
-    //     mode: 'no-cors',
-    //     // headers: {
-    //     //     'Content-Type': 'multipart/form-data'
-    //     //     // 'Content-Type': 'application/json'
-    //     //     // 'Content-Type': 'application/x-www-form-urlencoded',
-    //     // },
-    //     body: form // body data type must match "Content-Type" header
-    // }).then(response => response.json()).then(res => console.log(res));
-    // //}).then(response => console.log(response.headers));
-    
-    fetch(url)
+
+    fetch(url,{
+            method: 'POST',
+            // mode:'cors',   
+            headers: {
+                'Access-Control-Allow-Origin' : '*',
+                'Access-Control-Allow-Methods' : '*',
+                'Access-Control-Allow-Headers' : '*',
+            },
+            body: form,       
+        })
     .then(response => response.json())
     .then(res => console.log(res.res));
    
@@ -66,10 +61,6 @@ function pushToServer(){
     // form.enctype = 'multipart/form-data';
 
     // form.submit();
-    let formData = document.getElementById('formSubmit');
-    //alert(formData.toString())
-    // postData(url).then((data) => {
-    //     console.log(data);
-    // });
+    
     postData(url);
 }
