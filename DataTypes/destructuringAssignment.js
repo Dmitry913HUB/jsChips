@@ -262,28 +262,172 @@
 
 }
 /*---------------------------------------*/
-/*          Итого        */
+/*          Вложенная деструктуризация        */
 {
+
+    // В приведённом ниже коде options хранит другой объект в свойстве size и массив в свойстве items. 
+    // Шаблон в левой части присваивания имеет такую же структуру, чтобы извлечь данные из них:
+
+    let options = {
+    size: {
+        width: 100,
+        height: 200
+    },
+    items: ["Cake", "Donut"],
+    extra: true
+    };
+
+    // деструктуризация разбита на несколько строк для ясности
+    let {
+    size: { // положим size сюда
+        width,
+        height
+    },
+    items: [item1, item2], // добавим элементы к items
+    title = "Menu" // отсутствует в объекте (используется значение по умолчанию)
+    } = options;
+
+    alert(title);  // Menu
+    alert(width);  // 100
+    alert(height); // 200
+    alert(item1);  // Cake
+    alert(item2);  // Donut
+
+}
+/*---------------------------------------*/
+/*          Умные параметры функций        */
+{
+
+    // мы передаём объект в функцию
+    let options = {
+    title: "My menu",
+    items: ["Item1", "Item2"]
+    };
+
+    // ...и она немедленно извлекает свойства в переменные
+    function showMenu({title = "Untitled", width = 200, height = 100, items = []}) {
+    // title, items – взято из options,
+    // width, height – используются значения по умолчанию
+    alert( `${title} ${width} ${height}` ); // My Menu 200 100
+    alert( items ); // Item1, Item2
+    }
+
+    showMenu(options);
+
+    // Мы также можем использовать более сложное деструктурирование с вложенными объектами и двоеточием:
+
+    options = {
+    title: "My menu",
+    items: ["Item1", "Item2"]
+    };
+
+    function showMenu({
+    title = "Untitled",
+    width: w = 100,  // width присваиваем в w
+    height: h = 200, // height присваиваем в h
+    items: [item1, item2] // первый элемент items присваивается в item1, второй в item2
+    }) {
+    alert( `${title} ${w} ${h}` ); // My Menu 100 200
+    alert( item1 ); // Item1
+    alert( item2 ); // Item2
+    }
+
+    showMenu(options);
+
+    // Пожалуйста, обратите внимание, что такое деструктурирование подразумевает, 
+    // что в showMenu() будет обязательно передан аргумент. 
+    // Если нам нужны все значения по умолчанию, то нам следует передать пустой объект:
+
+    showMenu({}); // ок, все значения - по умолчанию
+
+    showMenu(); // так была бы ошибка
+    // Мы можем исправить это, сделав {} значением по умолчанию для всего объекта параметров:
+
+    function showMenu({ title = "Menu", width = 100, height = 200 } = {}) {
+    alert( `${title} ${width} ${height}` );
+    }
+
+    showMenu(); // Menu 100 200
 
 }
 /*---------------------------------------*/
 /*          Итого        */
 {
 
-}
-/*---------------------------------------*/
-/*          Итого        */
-{
+    // Деструктуризация позволяет разбивать объект или массив на переменные при присвоении.
+
+    // Полный синтаксис для объекта:
+
+    // let {prop : varName = default, ...rest} = object
+    // Cвойство prop объекта object здесь должно быть присвоено переменной varName. 
+    // Если в объекте отсутствует такое свойство, переменной varName присваивается значение по умолчанию.
+
+    // Свойства, которые не были упомянуты, копируются в объект rest.
+
+    // Полный синтаксис для массива:
+
+    // let [item1 = default, item2, ...rest] = array
+    // Первый элемент отправляется в item1; второй отправляется в item2, 
+    // все остальные элементы попадают в массив rest.
+
+    // Можно извлекать данные из вложенных объектов и массивов, 
+    // для этого левая сторона должна иметь ту же структуру, что и правая.
 
 }
 /*---------------------------------------*/
-/*          Итого        */
+/*          Задачи        */
 {
 
-}
-/*---------------------------------------*/
-/*          Итого        */
-{
+    // Деструктурирующее присваивание
+    let user = { name: "John", years: 30 };
+
+    // ваш код должен быть с левой стороны:
+    let {
+        name,
+        years: age,
+        isAdmin = "false"
+    } = user
+
+    alert( name ); // John
+    alert( age ); // 30
+    alert( isAdmin ); // false
+
+    // Максимальная зарплата
+
+    function topSalary(sal){
+        if(sal == {} || sal == undefined)
+        return null;
+
+        // let maxNub = Math.max(Object.values(sal))
+
+        for(let [key, value] of Object.entries(sal)){
+            if(value === Math.max(Object.values(sal)))
+            return key
+        }
+    }
+
+    function topSalary(salaries) {
+
+        let max = 0;
+        let maxName = null;
+      
+        for(const [name, salary] of Object.entries(salaries)) {
+          if (max < salary) {
+            max = salary;
+            maxName = name;
+          }
+        }
+      
+        return maxName;
+      }
+
+    let salaries = {
+    "John": 100,
+    "Pete": 300,
+    "Mary": 250
+    };
+
+    console.log(topSalary(salaries))
 
 }
 /*---------------------------------------*/
