@@ -323,8 +323,31 @@
 
 }
 /*---------------------------------------*/
-/*          Итого        */
+/*          Разбор строки с датой        */
 {
+
+    // Метод Date.parse(str) считывает дату из строки.
+
+    // Формат строки должен быть следующим: YYYY-MM-DDTHH:mm:ss.sssZ, где:
+
+    // YYYY-MM-DD – это дата: год-месяц-день.
+    // Символ "T" используется в качестве разделителя.
+    // HH:mm:ss.sss – время: часы, минуты, секунды и миллисекунды.
+    // Необязательная часть 'Z' обозначает часовой пояс в формате +-hh:mm. 
+    // Если указать просто букву Z, то получим UTC+0.
+    // Возможны и более короткие варианты, например, YYYY-MM-DD или YYYY-MM, или даже YYYY.
+
+    // Вызов Date.parse(str) обрабатывает строку в заданном формате и возвращает 
+    // таймстамп (количество миллисекунд с 1 января 1970 года UTC+0). Если формат неправильный, возвращается NaN.
+
+    let ms = Date.parse('2012-01-26T13:51:50.417-07:00');
+
+    alert(ms); // 1327611110417 (таймстамп)
+    // Можно тут же создать объект new Date из таймстампа:
+
+    let date = new Date( Date.parse('2012-01-26T13:51:50.417-07:00') );
+
+    alert(date);
 
 }
 /*---------------------------------------*/
@@ -336,16 +359,201 @@
 /*          Итого        */
 {
 
-}
-/*---------------------------------------*/
-/*          Итого        */
-{
+    // Дата и время в JavaScript представлены объектом Date. 
+    // Нельзя создать «только дату» или «только время»: объекты Date всегда содержат и то, и другое.
+    // Счёт месяцев начинается с нуля (да, январь – это нулевой месяц).
+    // Дни недели в getDay() также отсчитываются с нуля, что соответствует воскресенью.
+    // Объект Date самостоятельно корректируется при введении значений, 
+    // выходящих за рамки допустимых. Это полезно для сложения/вычитания дней/месяцев/недель.
+    // Даты можно вычитать, и разность возвращается в миллисекундах. Так происходит, 
+    // потому что при преобразовании в число объект Date становится таймстампом.
+    // Используйте Date.now() для быстрого получения текущего времени в формате таймстампа.
+    // Учтите, что, в отличие от некоторых других систем, 
+    // в JavaScript таймстамп в миллисекундах, а не в секундах.
+
+    // Порой нам нужно измерить время с большей точностью. 
+    // Собственными средствами JavaScript измерять время в микросекундах 
+    // (одна миллионная секунды) нельзя, но в большинстве сред такая возможность есть. 
+    // К примеру, в браузерах есть метод performance.now(), 
+    // возвращающий количество миллисекунд с начала загрузки страницы с точностью до микросекунд 
+    // (3 цифры после точки):
+
+    alert(`Загрузка началась ${performance.now()}мс назад`);
+    // Получаем что-то вроде: "Загрузка началась 34731.26000000001мс назад"
+    // .26 –- это микросекунды (260 микросекунд)
+    // корректными являются только первые три цифры после точки, а осталь
 
 }
 /*---------------------------------------*/
-/*          Итого        */
+/*          Задачи        */
 {
 
+    //zad 1
+
+    let date1 = new Date(2012, 1, 20, 3, 12)
+
+    //zad 2 day wick
+
+    function getWeekDay(date){
+        switch (date.getDay()) {
+            case 0:
+                return "ВС";
+                break;
+            case 1:
+                return "ПН";
+                break;
+            case 2:
+                return "ВТ";
+                break;
+            case 3:
+                return "СР";
+                break;
+            case 4:
+                return "ЧТ";
+                break;
+            case 5:
+                return "ПТ";
+                break;
+            case 6:
+                return "СБ";
+                break;
+            default:
+                alert( "Нет таких значений" );
+        }
+    }
+
+    function getWeekDay(date) {
+    let days = ['ВС', 'ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ'];
+
+    return days[date.getDay()];
+    }
+
+    let date = new Date(2014, 0, 3); // 3 января 2014 года
+    alert( getWeekDay(date) ); // ПТ
+
+    //zad 3 
+
+    function getLocalDay(date) {
+
+    let day = date.getDay();
+
+    if (day == 0) { // день недели 0 (воскресенье) в европейской нумерации будет 7
+        day = 7;
+    }
+
+    return day;
+    }
+
+    // zad 4 Какой день месяца был много дней назад?
+
+    function getDateAgo(date, days) {
+        let newDate = new Date(date);
+
+        newDate.setDate(date.getDate() - days);
+
+        return newDate.getDate();
+    }
+
+    date = new Date(2015, 0, 2);
+
+    alert( getDateAgo(date, 1) ); // 1, (1 Jan 2015)
+    alert( getDateAgo(date, 2) ); // 31, (31 Dec 2014)
+    alert( getDateAgo(date, 365) ); // 2, (2 Jan 2014)
+
+    // zadacha 5 Последнее число месяца?
+    function getLastDayOfMonth(year, month){
+        let date = new Date(year, month + 1, 0)
+
+        return date.getDate();
+    }
+
+    alert( getLastDayOfMonth(2012, 0) ); // 31
+    alert( getLastDayOfMonth(2012, 1) ); // 29
+    alert( getLastDayOfMonth(2013, 1) ); // 28
+
+    //zad 6 Сколько сегодня прошло секунд?
+
+    function getSecondsToday(){
+        let timeNow = Date.now();
+        let timeDay = new Date(timeNow.getFullYear(), timeNow.getMonth(), timeNow.getDate(), 0, 0, 0);
+        return Math.round((timeNow - timeDay) / 1000);
+    }
+
+    function getSecondsToday() {
+        let d = new Date();
+        return d.getHours() * 3600 + d.getMinutes() * 60 + d.getSeconds();
+      }
+
+    //zadacha 7 Сколько секунд осталось до завтра?
+
+    // Сперва сгенерируем дату на «завтра» и сделаем следующее:
+
+    function getSecondsToTomorrow() {
+    let now = new Date();
+
+    // завтрашняя дата
+    let tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate()+1);
+
+    let diff = tomorrow - now; // разница в миллисекундах
+    return Math.round(diff / 1000); // преобразуем в секунды
+    }
+    // Альтернативное решение:
+
+    function getSecondsToTomorrow() {
+    let now = new Date();
+    let hour = now.getHours();
+    let minutes = now.getMinutes();
+    let seconds = now.getSeconds();
+    let totalSecondsToday = (hour * 60 + minutes) * 60 + seconds;
+    let totalSecondsInADay = 86400;
+
+    return totalSecondsInADay - totalSecondsToday;
+    }
+
+    // zadacha 8 Форматирование относительной даты
+
+    function formatDate(date) {
+        let diff = new Date() - date; // разница в миллисекундах
+      
+        if (diff < 1000) { // меньше 1 секунды
+          return 'прямо сейчас';
+        }
+      
+        let sec = Math.floor(diff / 1000); // преобразовать разницу в секунды
+      
+        if (sec < 60) {
+          return sec + ' сек. назад';
+        }
+      
+        let min = Math.floor(diff / 60000); // преобразовать разницу в минуты
+        if (min < 60) {
+          return min + ' мин. назад';
+        }
+      
+        // отформатировать дату
+        // добавить ведущие нули к единственной цифре дню/месяцу/часам/минутам
+        let d = date;
+        d = [
+          '0' + d.getDate(),
+          '0' + (d.getMonth() + 1),
+          '' + d.getFullYear(),
+          '0' + d.getHours(),
+          '0' + d.getMinutes()
+        ].map(component => component.slice(-2)); // взять последние 2 цифры из каждой компоненты
+      
+        // соединить компоненты в дату
+        return d.slice(0, 3).join('.') + ' ' + d.slice(3).join(':');
+      }
+      
+      alert( formatDate(new Date(new Date - 1)) ); // "прямо сейчас"
+      
+      alert( formatDate(new Date(new Date - 30 * 1000)) ); // "30 сек. назад"
+      
+      alert( formatDate(new Date(new Date - 5 * 60 * 1000)) ); // "5 мин. назад"
+      
+      // вчерашняя дата вроде 31.12.2016, 20:00
+      alert( formatDate(new Date(new Date - 86400 * 1000)) );
+      
 }
 /*---------------------------------------*/
 /*          Итого        */
