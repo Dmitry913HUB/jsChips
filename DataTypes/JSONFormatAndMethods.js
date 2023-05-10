@@ -215,13 +215,102 @@
 
 }
 /*---------------------------------------*/
-/*          Итого        */
+/*          Форматирование: space        */
 {
+
+    // Ниже space = 2 указывает JavaScript отображать вложенные объекты в 
+    // несколько строк с отступом в 2 пробела внутри объекта:
+
+    let user = {
+    name: "John",
+    age: 25,
+    roles: {
+        isAdmin: false,
+        isEditor: true
+    }
+    };
+
+    alert(JSON.stringify(user, null, 2));
+    /* отступ в 2 пробела:
+    {
+    "name": "John",
+    "age": 25,
+    "roles": {
+        "isAdmin": false,
+        "isEditor": true
+    }
+    }
+    */
+
+    /* для JSON.stringify(user, null, 4) результат содержит больше отступов:
+    {
+        "name": "John",
+        "age": 25,
+        "roles": {
+            "isAdmin": false,
+            "isEditor": true
+        }
+    }
+    */
+
+    // Третьим аргументом также может быть строка. 
+    // В этом случае строка будет использоваться для отступа вместо ряда пробелов.
 
 }
 /*---------------------------------------*/
-/*          Итого        */
+/*          Пользовательский «toJSON»        */
 {
+
+    // Как и toString для преобразования строк, 
+    // объект может предоставлять метод toJSON для преобразования в JSON. 
+    // JSON.stringify автоматически вызывает его, если он есть.
+
+    let room = {
+    number: 23
+    };
+
+    let meetup = {
+    title: "Conference",
+    date: new Date(Date.UTC(2017, 0, 1)),
+    room
+    };
+
+    alert( JSON.stringify(meetup) );
+    /*
+    {
+        "title":"Conference",
+        "date":"2017-01-01T00:00:00.000Z",  // (1)
+        "room": {"number":23}               // (2)
+    }
+    */
+    // Как видим, date (1) стал строкой. Это потому, 
+    // что все объекты типа Date имеют встроенный метод toJSON, который возвращает такую строку.
+
+    // Теперь давайте добавим собственную реализацию метода toJSON в наш объект room (2):
+
+    room = {
+    number: 23,
+    toJSON() {
+        return this.number;
+    }
+    };
+
+    meetup = {
+    title: "Conference",
+    room
+    };
+
+    alert( JSON.stringify(room) ); // 23
+
+    alert( JSON.stringify(meetup) );
+    /*
+    {
+        "title":"Conference",
+        "room": 23
+    }
+    */
+    // Как видите, toJSON используется как при прямом вызове JSON.stringify(room), 
+    // так и когда room вложен в другой сериализуемый объект.
 
 }
 /*---------------------------------------*/
