@@ -272,6 +272,138 @@
 /*          Задачи          */
 {
 
+    // zadacha 2 Объект счётчика
+
+    function Counter() {
+        let count = 0;
+      
+        this.up = function() {
+          return ++count;
+        };
+      
+        this.down = function() {
+          return --count;
+        };
+      }
+      
+      let counter = new Counter();
+      
+      alert( counter.up() ); // 1
+      alert( counter.up() ); // 2
+      alert( counter.down() ); // 1
+
+    // zadacha 3
+
+    let phrase = "Hello";
+
+    if (true) {
+    let user = "John";
+
+    function sayHi() {
+        alert(`${phrase}, ${user}`);
+    }
+    }
+
+    sayHi();
+    // решение
+    // Результатом будет ошибка.
+
+    // Функция sayHi объявлена внутри if, 
+    // так что она живёт только внутри этого блока. Снаружи нет sayHi.
+
+    // zadacha 4 Сумма с помощью замыканий
+
+    function sum(a){
+        return function(b) {
+            return a + b;
+          }
+    }
+
+    alert( sum(1)(2) ); // 3
+    alert( sum(5)(-1) ); // 4
+
+    // zadacha 5 Фильтрация с помощью функции
+
+    function inBetween(a, b) {
+        return function(x){
+            return x >= a && x <= b;
+        }
+      }
+      
+      function inArray(arr) {
+        return function(x){
+            return arr.includes(x);
+        }
+      }
+    
+    let arr = [1, 2, 3, 4, 5, 6, 7];
+
+    alert( arr.filter(inBetween(3, 6)) ); // 3,4,5,6
+
+    alert( arr.filter(inArray([1, 2, 10])) ); // 1,2
+
+    // zadacha 6 Сортировать по полю
+
+    function byField(key){
+        return (a, b) => a[key] > b[key] ? 1 : -1
+    }
+    
+    let users = [
+        { name: "John", age: 20, surname: "Johnson" },
+        { name: "Pete", age: 18, surname: "Peterson" },
+        { name: "Ann", age: 19, surname: "Hathaway" }
+      ];
+
+    users.sort(byField('name'));
+    users.sort(byField('age'));
+
+    // zadacha 7 Армия функций
+
+    function makeArmy() {
+
+        let shooters = [];
+      
+        for(let i = 0; i < 10; i++) {
+          let shooter = function() { // функция shooter
+            alert( i ); // должна выводить порядковый номер
+          };
+          shooters.push(shooter);
+      
+      
+        }
+      
+        return shooters;
+      }
+      
+      let army = makeArmy();
+      
+      army[0](); // 0
+      army[5](); // 5
+
+    //   Можно использовать другой трюк, давайте 
+    //   рассмотрим его для лучшего понимания предмета:
+
+    function makeArmy() {
+    let shooters = [];
+
+    let i = 0;
+    while (i < 10) {
+        let j = i;
+        let shooter = function() { // функция shooter
+        alert( j ); // должна выводить порядковый номер
+        };
+        shooters.push(shooter);
+        i++;
+    }
+
+    return shooters;
+    }
+
+    army = makeArmy();
+
+    army[0](); // 0
+    army[5](); // 5
+
 }
 /*---------------------------------------*/
 /*          итого          */
