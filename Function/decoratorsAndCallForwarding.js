@@ -273,6 +273,102 @@
     }
 
     // Задерживающий декоратор
+
+    function delay(func, time){
+        return function(){
+            setTimeout(() => f.apply(this, arguments), time);
+        }
+    }
+
+    function delay(f, ms) {
+
+        return function(...args) {
+          let savedThis = this; // сохраняем this в промежуточную переменную
+          setTimeout(function() {
+            f.apply(savedThis, args); // используем её
+          }, ms);
+        };
+      
+      }   
+    
+    function f(x) {
+        alert(x);
+    }
+
+    // создаём обёртки
+    let f1000 = delay(f, 1000);
+    let f1500 = delay(f, 1500);
+
+    f1000("test"); // показывает "test" после 1000 мс
+    f1500("test"); // показывает "test" после 1500 мс
+
+    // Декоратор debounce
+
+    function debounce(f, ms){
+
+        let isColdown = false
+
+        return function(){
+            if (isColdown) return;
+
+            f.apply(this, arguments);
+
+            isCooldown = true;
+
+            setTimeout(() => isCooldown = false, ms);
+        }
+    }
+
+    let f = debounce(alert, 1000);
+
+    f(1); // выполняется немедленно
+    f(2); // проигнорирован
+
+    setTimeout( () => f(3), 100); // проигнорирован (прошло только 100 мс)
+    setTimeout( () => f(4), 1100); // выполняется
+    setTimeout( () => f(5), 1500); // проигнорирован (прошло только 400 мс от последнего вызова)
+
+    // Вызов debounce возвращает обёртку. Возможны два состояния:
+
+    // isCooldown = false – готова к выполнению.
+    // isCooldown = true – ожидание окончания тайм-аута.
+    // В первом вызове isCoolDown = false, поэтому вызов продолжается, и состояние изменяется на true.
+
+    // Пока isCoolDown имеет значение true, все остальные вызовы игнорируются.
+
+    // Затем setTimeout устанавливает его в false после заданной задержки.
+
+    // Тормозящий (throttling) декоратор
+
+    function throttle(func, ms) {
+
+        let isThrottled = false,
+          savedArgs,
+          savedThis;
+      
+        function wrapper() {
+      
+          if (isThrottled) { // (2)
+            savedArgs = arguments;
+            savedThis = this;
+            return;
+          }
+      
+          func.apply(this, arguments); // (1)
+      
+          isThrottled = true;
+      
+          setTimeout(function() {
+            isThrottled = false; // (3)
+            if (savedArgs) {
+              wrapper.apply(savedThis, savedArgs);
+              savedArgs = savedThis = null;
+            }
+          }, ms);
+        }
+      
+        return wrapper;
+      }
       
 
 }
